@@ -1,0 +1,7 @@
+west-commands:
+  - file: flash_ram.py
+	commands:
+	  - name: flash-ram
+		class: FlashRam
+		help: Flash binary to RAM using OpenOCD
+
