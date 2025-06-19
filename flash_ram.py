@@ -2,10 +2,25 @@
 
 """west "flash-ram" command"""
 
+import os
+import sys
 from pathlib import Path
+
+ZEPHYR_BASE = os.environ.get("ZEPHYR_BASE")
+if not ZEPHYR_BASE:
+    current = Path(__file__).resolve()
+    for parent in current.parents:
+        if (parent / "zephyr").is_dir():
+            ZEPHYR_BASE = str(parent / "zephyr")
+            break
+    else:
+        print("ZEPHYR_BASE not set and zephyr directory not found.")
+        sys.exit(1)
+
+sys.path.insert(0, os.path.join(ZEPHYR_BASE, "scripts", "west_commands"))
+
 from west.commands import WestCommand
 from run_common import add_parser_common
-
 from flash import Flash
 
 
@@ -30,4 +45,3 @@ class FlashRam(WestCommand):
         runner_args = list(runner_args)
         runner_args.append("--use-elf")
         return self.flash_cmd.do_run(my_args, runner_args)
-
